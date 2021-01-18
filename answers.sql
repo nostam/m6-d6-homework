@@ -41,3 +41,44 @@ DELETE FROM public.customers WHERE city = 'Lyon'
 
 --Update all null region values to 'Unknown'
 UPDATE public.customers SET region = 'Unknown' WHERE region IS NULL
+
+
+--HW3
+-- Prepare Author table set all data types correctly (same fields with previous mongo schema, without references)
+CREATE TABLE IF NOT EXISTS
+	users(
+	user_id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+	firstName VARCHAR(50) NOT NULL,
+	lastName VARCHAR(50) NOT NULL,
+	img VARCHAR(65535)
+)
+
+-- Prepare Article table set all data types correctly (same fields with previous mongo schema, without references)
+CREATE TABLE IF NOT EXISTS
+	articles(
+	id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+	headLine VARCHAR (100) NOT NULL,
+	subHead VARCHAR (200) NOT NULL,
+	content TEXT NOT NULL,
+	category_name VARCHAR(40),
+	category_img VARCHAR(65535),
+	author_id INTEGER NOT NULL,
+	cover VARCHAR(65535),
+	created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+	updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW() ON UPDATE NOW()
+	FOREIGN KEY(author_id)
+	REFERENCES users(user_id)
+);
+
+-- Prepare Reviews table set all data types correctly (same fields with previous mongo schema, without references)
+CREATE TABLE IF NOT EXISTS
+	reviews(
+	review_id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+	text TEXT NOT NULL,
+	user VARCHAR(50) NOT NULL,
+	--user_id INTEGER NOT NULL
+	created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+	updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW() ON UPDATE NOW()
+	/* 	FOREIGN KEY(user_id)
+	REFERENCES users(user_id)*/
+);
